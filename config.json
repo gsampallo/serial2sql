@@ -1,0 +1,9 @@
+{
+    "port":"/dev/ttyUSB0",
+    "baudrate": 115200,
+    "tableName": "tabla1",
+    "fields": [
+        { "name":"indice","type":"INT[10]" },
+        { "name":"valor","type":"INT[10]" }
+    ]
+}

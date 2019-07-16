@@ -37,25 +37,22 @@ class DatabaseControl:
             else:
                 print(err)        
         
-        self.sqlInsert = "INSERT INTO "+self.tableName+" ("
-        # self.sqlInsert = self.sqlInsert+","+self.fields[0][0]
-        # for field in range(1,len(self.fields)):
-        #     self.sqlInsert = self.sqlInsert+","+field[0]
-        # self.sqlInsert = self.sqlInsert + ") VALUES ("+("'%s',"*(len(self.fields) -1))+"'%s'"+")"
-        print(self.sqlInsert)
+        self.sqlInsert = "INSERT INTO "+self.tableName+" ("+self.fields[0][0]
+        #fieldsRange = range(1,len(self.fields))
+        for i in range(1,len(self.fields)):
+            self.sqlInsert = self.sqlInsert+","+self.fields[i][0]
+        self.sqlInsert = self.sqlInsert + ") VALUES ("+("%s,"*(len(self.fields) -1))+"%s"+")"
 
 
     def getInsertDataSQL(self):
-        print(self.insertData)    
+        print(self.sqlInsert)    
 
 
     def insertData(self,data):
-        sql = "INSERT INTO "+self.tableName+" ("
-        for field in self.fields:
-            sql = sql+","+field[0]
-        sql = sql + ") VALUES "
         try:
-            self.cursor.execute(sql)
+            self.cursor.execute(self.sqlInsert,data)
+            self.cnx.commit()
+
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
                 print("Something is wrong with your user name or password")
