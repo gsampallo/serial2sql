@@ -62,8 +62,9 @@ class DatabaseControl:
         if os.path.exists(outputFile):    
             os.remove(outputFile)
 
-    def insertData(self,data):
-        if(self.output):
+
+    def saveToFile(self,data):
+        if(self.outputFile.find("sql") > 0):
             sql = self.sqlInsert
             #print(sql)
             sql = sql % tuple(data)+";\n"
@@ -71,6 +72,17 @@ class DatabaseControl:
             file = open(self.outputFile,"a")
             file.write(sql)
             file.close()
+        elif(self.outputFile.find("csv") > 0):
+            file = open(self.outputFile,"a")
+            file.write(str(data).strip("[]")+";")
+            file.close()
+
+
+          
+    def insertData(self,data):
+        if(self.output):
+            self.saveToFile(data)
+
         try:
             self.cursor.execute(self.sqlInsert,data)
             self.cnx.commit()

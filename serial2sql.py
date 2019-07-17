@@ -1,4 +1,5 @@
 import serial
+from serial import SerialException
 from DatabaseControl import DatabaseControl
 import json
 import os
@@ -23,19 +24,28 @@ class serial2sql:
         self.dbC.setOutPutFile(outputFile)
 
     def run(self):
-        t = [1,1]
-        t1 = [2,1]
-        t2 = [3,1]
-        
-        self.dbC.insertData(t)
-        self.dbC.insertData(t1)
-        self.dbC.insertData(t2)
 
-    # def main(argv):
-    #     self.parameters = param
-    #     self.loadParameters()
+        try:
+            ser = serial.Serial(self.param["port"], self.param["baudrate"], timeout=1)
+            while(True):
+                line = str(ser.readline())
+                if(len(line)> 0):
+                    if(line.find(",")):
+                        data = line.split(",")
+                        self.dbC.insertData(data)
+        except SerialException as se:
+            print("Error when tried to open the port")
+            print(se)
+
+        except Exception as e:
+            print("Error when tried to open the port")
+            print(e)
+        
+
 
 def doc():
+    print("Use only serial2sql.py to save data to database.")
+    print("If you use the -o parameter, needs to add the name of file where you wants to save the data.")
     print("Please check documentation: https://github.com/gsampallo/serial2sql")
 
 if __name__ == "__main__":
@@ -47,6 +57,7 @@ if __name__ == "__main__":
     else:
         if(len(sys.argv[1:]) == 0):   
             s = serial2sql("config.json")
+            s.run()
         else:
             if(sys.argv[1] == '-o'):
                 if(len(sys.argv[1:]) >= 2):
@@ -56,3 +67,4 @@ if __name__ == "__main__":
                 else:
                     print("Missing output file")
                     doc()
+                    exit()

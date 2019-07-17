@@ -1,5 +1,5 @@
 {
-    "port":"/dev/ttyUSB0",
+    "port":"COM3",
     "baudrate": 115200,
     "credentials" : {
     "host":"localhost",
