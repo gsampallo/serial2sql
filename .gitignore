@@ -1,5 +1,7 @@
 test.py
 test1.py
+test2.py
+test3.py
 *.sql
 *.csv
 .vscode/c_cpp_properties.json

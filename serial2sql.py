@@ -8,7 +8,6 @@ import sys
 class serial2sql:
 
     def __init__(self,param):
-        print("inicio")
         self.parameters = param
         self.output = False
         self.loadParameters()
@@ -18,12 +17,14 @@ class serial2sql:
             self.param = json.load(f)
 
         self.dbC = DatabaseControl(self.param)
-        self.dbC.createTable()
+        #self.dbC.createTable()
 
     def setOutput(self,outputFile):
         self.dbC.setOutPutFile(outputFile)
 
     def run(self):
+        self.dbC.createTable()
+        print("Opening port and starting to save data")
         print("Press Ctrl+C to stop")
         try:
             ser = serial.Serial(self.param["port"], self.param["baudrate"], timeout=1)
@@ -58,14 +59,12 @@ if __name__ == "__main__":
     else:
         if(len(sys.argv[1:]) == 0):   
             s = serial2sql("config.json")
-            s.run()
-        else:
-            if(sys.argv[1] == '-o'):
-                if(len(sys.argv[1:]) >= 2):
-                    s = serial2sql("config.json")
-                    s.setOutput(sys.argv[2])
-                    s.run()
-                else:
-                    print("Missing output file")
-                    doc()
-                    exit()
+        elif(sys.argv[1] == '-o'):
+            if(len(sys.argv[1:]) >= 2):
+                s = serial2sql("config.json")
+                s.setOutput(sys.argv[2])
+            else:
+                print("Missing output file")
+                doc()
+                exit()
+        s.run()

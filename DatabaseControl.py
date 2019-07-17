@@ -6,20 +6,11 @@ import json
 import io
 import os
 
-# config = {
-#     'user': 'root',
-#     'password': '',
-#     'host': 'localhost',
-#     'database': 'data',
-#     'raise_on_warnings': True,
-# }
-
 class DatabaseControl:
 
     def __init__(self,config):
         self.output = False
         self.config = config
-        #print(config["host"])
         self.cnx = mysql.connector.connect(user=config["credentials"]["user"],database=config["credentials"]["database"],password=config["credentials"]["password"])
         self.cursor = self.cnx.cursor()        
 
@@ -35,17 +26,24 @@ class DatabaseControl:
             sql = sql+","+field['name']+" "+field['type']
         sql = sql + ",PRIMARY KEY (id))"
         print(sql)
-        try:
-            #self.cursor.execute(sqlDrop)
-            self.cursor.execute(sql)
-        except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print("Something is wrong with your user name or password")
-            elif err.errno == errorcode.ER_BAD_DB_ERROR:
-                print("Database does not exist")
-            else:
-                print(err)        
-        
+
+
+        if(self.output):
+            try:
+                #self.cursor.execute(sqlDrop)
+                self.cursor.execute(sql)
+            except mysql.connector.Error as err:
+                if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                    print("Something is wrong with your user name or password")
+                elif err.errno == errorcode.ER_BAD_DB_ERROR:
+                    print("Database does not exist")
+                else:
+                    print(err)        
+        else:
+            file = open(self.outputFile,"a")
+            file.write(sql+"\n")
+            file.close()           
+
         self.sqlInsert = "INSERT INTO "+tableName+" ("+fields[0]['name']
 
         for i in range(1,len(fields)):
@@ -68,13 +66,13 @@ class DatabaseControl:
             sql = self.sqlInsert
             #print(sql)
             sql = sql % tuple(data)+";\n"
-            print(sql)
+            #print(sql)
             file = open(self.outputFile,"a")
             file.write(sql)
             file.close()
         elif(self.outputFile.find("csv") > 0):
             file = open(self.outputFile,"a")
-            file.write(str(data).strip("[]")+";")
+            file.write(str(data).strip("[]")+"\n")
             file.close()
 
     def saveToDataBase(self,data):
