@@ -20,8 +20,8 @@ class serial2sql:
         t = [1,1]
         t1 = [2,1]
         t2 = [3,1]
-
-        self.dbC.insertData(t);
-        self.dbC.insertData(t1);
-        self.dbC.insertData(t2);
+        
+        self.dbC.insertData(t)
+        self.dbC.insertData(t1)
+        self.dbC.insertData(t2)
 

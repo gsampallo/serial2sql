@@ -1,6 +1,10 @@
 {
     "port":"/dev/ttyUSB0",
     "baudrate": 115200,
+    "host":"localhost",
+    "database":"data"
+    "userName":"usuario1",
+    "password":"DemoDemo%1810",
     "tableName": "datos1",
     "fields": [
         { "name":"indice","type":"INT(10)" },
