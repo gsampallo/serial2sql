@@ -2,32 +2,37 @@
 from datetime import datetime, timedelta
 import mysql.connector
 from mysql.connector import errorcode
+import json
 
-config = {
-    'user': 'usuario1',
-    'password': 'DemoDemo%1810',
-    'host': 'localhost',
-    'database': 'data',
-    'raise_on_warnings': True,
-}
+# config = {
+#     'user': 'root',
+#     'password': '',
+#     'host': 'localhost',
+#     'database': 'data',
+#     'raise_on_warnings': True,
+# }
 
 class DatabaseControl:
 
-    def __init__(self,fields):
-        self.fields = fields
-        self.cnx = mysql.connector.connect(**config)
+    def __init__(self,config):
+        self.output = False
+        self.config = config
+        #print(config["host"])
+        self.cnx = mysql.connector.connect(user=config["credentials"]["user"],database=config["credentials"]["database"],password=config["credentials"]["password"])
         self.cursor = self.cnx.cursor()        
 
-    def createTable(self,tableName):
-        self.tableName = tableName
-        sqlDrop = "DROP TABLE IF EXISTS `"+config['database']+"`.`"+self.tableName+"`"
+    def createTable(self):
+        #self.tableName = tableName
+        tableName = self.config["tableName"]
+        sqlDrop = "DROP TABLE IF EXISTS `"+self.config["credentials"]["database"]+"`.`"+tableName+"`;"
 
-        #print(sqlDrop)
-        sql = "CREATE TABLE "+self.tableName+" (id INT(9) NOT NULL AUTO_INCREMENT"
-        for field in self.fields:
+        print(sqlDrop)
+        sql = "CREATE TABLE "+tableName+" (id INT(9) NOT NULL AUTO_INCREMENT"
+        fields = self.config["fields"]
+        for field in fields:
             sql = sql+","+field['name']+" "+field['type']
         sql = sql + ",PRIMARY KEY (id))"
-        #print(sql)
+        print(sql)
         try:
             #self.cursor.execute(sqlDrop)
             self.cursor.execute(sql)
@@ -39,18 +44,26 @@ class DatabaseControl:
             else:
                 print(err)        
         
-        self.sqlInsert = "INSERT INTO "+self.tableName+" ("+self.fields[0]['name']
+        self.sqlInsert = "INSERT INTO "+tableName+" ("+fields[0]['name']
 
-        for i in range(1,len(self.fields)):
-            self.sqlInsert = self.sqlInsert+","+self.fields[i]['name']
-        self.sqlInsert = self.sqlInsert + ") VALUES ("+("%s,"*(len(self.fields) -1))+"%s"+")"
+        for i in range(1,len(fields)):
+            self.sqlInsert = self.sqlInsert+","+fields[i]['name']
+        self.sqlInsert = self.sqlInsert + ") VALUES ("+("%s,"*(len(fields) -1))+"%s"+")"
 
 
     def getInsertDataSQL(self):
         print(self.sqlInsert)    
 
+    def setOutPutFile(self,outputFile):
+        self.output = True
+        self.outputFile = outputFile
 
     def insertData(self,data):
+        if(self.output):
+            sql = self.sqlInsert
+            print(sql)
+            sql = sql % data
+            print(sql)
         try:
             self.cursor.execute(self.sqlInsert,data)
             self.cnx.commit()

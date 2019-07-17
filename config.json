@@ -1,10 +1,13 @@
 {
     "port":"/dev/ttyUSB0",
     "baudrate": 115200,
+    "credentials" : {
     "host":"localhost",
-    "database":"data"
-    "userName":"usuario1",
-    "password":"DemoDemo%1810",
+    "database":"data",
+    "user":"root",
+    "password":"",
+    "raise_on_warnings": "True"
+    },
     "tableName": "datos1",
     "fields": [
         { "name":"indice","type":"INT(10)" },
