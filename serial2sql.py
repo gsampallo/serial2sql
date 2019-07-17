@@ -28,9 +28,9 @@ class serial2sql:
         print("Press Ctrl+C to stop")
         try:
             ser = serial.Serial(self.param["port"], self.param["baudrate"], timeout=1)
+            ser.readline() #Line with no data
             while(True):
-
-                line = str(ser.readline()).replace("\r\n","")
+                line = str(ser.readline()).replace("\\r\\n","")[2:-1]
                 if(len(line)> 0):
                     if(line.find(",")):
                         data = line.split(",")

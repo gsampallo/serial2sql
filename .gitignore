@@ -6,3 +6,4 @@ test3.py
 *.csv
 *.pyc
 .vscode/c_cpp_properties.json
+.vscode/settings.json

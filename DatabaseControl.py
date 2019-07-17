@@ -19,7 +19,7 @@ class DatabaseControl:
         tableName = self.config["tableName"]
         sqlDrop = "DROP TABLE IF EXISTS `"+self.config["credentials"]["database"]+"`.`"+tableName+"`;"
 
-        print(sqlDrop)
+        #print(sqlDrop)
         sql = "CREATE TABLE "+tableName+" (id INT(9) NOT NULL AUTO_INCREMENT"
         fields = self.config["fields"]
         for field in fields:
@@ -28,7 +28,7 @@ class DatabaseControl:
         print(sql)
 
 
-        if(self.output):
+        if(not self.output):
             try:
                 #self.cursor.execute(sqlDrop)
                 self.cursor.execute(sql)
@@ -40,9 +40,10 @@ class DatabaseControl:
                 else:
                     print(err)        
         else:
-            file = open(self.outputFile,"a")
-            file.write(sql+"\n")
-            file.close()           
+            if(self.outputFile.find("sql") > 0):
+                file = open(self.outputFile,"a")
+                file.write(sql+";\n")
+                file.close()           
 
         self.sqlInsert = "INSERT INTO "+tableName+" ("+fields[0]['name']
 
@@ -62,11 +63,11 @@ class DatabaseControl:
 
 
     def saveToFile(self,data):
+        
         if(self.outputFile.find("sql") > 0):
             sql = self.sqlInsert
-            #print(sql)
-            sql = sql % tuple(data)+";\n"
-            #print(sql)
+            data1 = str(data).strip("[]").split(",")
+            sql = sql % tuple(data1)+";\n"
             file = open(self.outputFile,"a")
             file.write(sql)
             file.close()
@@ -89,6 +90,7 @@ class DatabaseControl:
                 print(err) 
           
     def insertData(self,data):
+        print(data)        
         if(self.output):
             self.saveToFile(data)
         else:

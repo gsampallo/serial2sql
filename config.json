@@ -1,5 +1,5 @@
 {
-    "port":"COM3",
+    "port":"COM36",
     "baudrate": 115200,
     "credentials" : {
     "host":"localhost",
@@ -8,9 +8,10 @@
     "password":"",
     "raise_on_warnings": "True"
     },
-    "tableName": "datos1",
+    "tableName": "data_from_serial",
     "fields": [
         { "name":"indice","type":"INT(10)" },
-        { "name":"valor","type":"INT(10)" }
+        { "name":"valor","type":"INT(10)" },
+        { "name":"codigo","type":"VARCHAR(10)" }
     ]
 }
