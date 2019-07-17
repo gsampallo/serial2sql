@@ -51,5 +51,9 @@ Or just save to csv file:
 python serial2sql.py -o output.csv
 ```
 
+## Want to know more?
+
+I wrote an article in my blog (http://www.gsampallo.com/blog/2019/07/17/serial-a-sql/)http://www.gsampallo.com/blog/2019/07/17/serial-a-sql/
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
