@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 import mysql.connector
 from mysql.connector import errorcode
 import json
+import io
+import os
 
 # config = {
 #     'user': 'root',
@@ -57,13 +59,18 @@ class DatabaseControl:
     def setOutPutFile(self,outputFile):
         self.output = True
         self.outputFile = outputFile
+        if os.path.exists(outputFile):    
+            os.remove(outputFile)
 
     def insertData(self,data):
         if(self.output):
             sql = self.sqlInsert
+            #print(sql)
+            sql = sql % tuple(data)+";\n"
             print(sql)
-            sql = sql % data
-            print(sql)
+            file = open(self.outputFile,"a")
+            file.write(sql)
+            file.close()
         try:
             self.cursor.execute(self.sqlInsert,data)
             self.cnx.commit()

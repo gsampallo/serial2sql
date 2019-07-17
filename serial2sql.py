@@ -39,18 +39,20 @@ def doc():
     print("Please check documentation: https://github.com/gsampallo/serial2sql")
 
 if __name__ == "__main__":
-    if(len(sys.argv[1:]) == 0):
-        if os.path.exists("config1.json"):       
-            s = serial2sql("config.json")
-            #main("config.json")
-        else:
-            print("config.json not found.")
-            doc()
+    
+    if (not os.path.exists("config.json")): 
+        print("config.json not found.")
+        doc()
+        exit()
     else:
-        if(sys.argv[1] == '-o'):
-            if(len(sys.argv[1:]) >= 2):
-                s = serial2sql("config.json")
-                s.setOutput(sys.argv[2])
-            else:
-                print("Missing output file")
-                doc()
+        if(len(sys.argv[1:]) == 0):   
+            s = serial2sql("config.json")
+        else:
+            if(sys.argv[1] == '-o'):
+                if(len(sys.argv[1:]) >= 2):
+                    s = serial2sql("config.json")
+                    s.setOutput(sys.argv[2])
+                    s.run()
+                else:
+                    print("Missing output file")
+                    doc()
