@@ -4,4 +4,5 @@ test2.py
 test3.py
 *.sql
 *.csv
+*.pyc
 .vscode/c_cpp_properties.json
