@@ -77,12 +77,7 @@ class DatabaseControl:
             file.write(str(data).strip("[]")+";")
             file.close()
 
-
-          
-    def insertData(self,data):
-        if(self.output):
-            self.saveToFile(data)
-
+    def saveToDataBase(self,data):
         try:
             self.cursor.execute(self.sqlInsert,data)
             self.cnx.commit()
@@ -93,5 +88,11 @@ class DatabaseControl:
             elif err.errno == errorcode.ER_BAD_DB_ERROR:
                 print("Database does not exist")
             else:
-                print(err)    
+                print(err) 
+          
+    def insertData(self,data):
+        if(self.output):
+            self.saveToFile(data)
+        else:
+            self.saveToDataBase(data)
 

@@ -1,5 +1,5 @@
 test.py
 test1.py
 *.sql
-out.csv
+*.csv
 .vscode/c_cpp_properties.json

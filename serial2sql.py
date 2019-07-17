@@ -24,11 +24,12 @@ class serial2sql:
         self.dbC.setOutPutFile(outputFile)
 
     def run(self):
-
+        print("Press Ctrl+C to stop")
         try:
             ser = serial.Serial(self.param["port"], self.param["baudrate"], timeout=1)
             while(True):
-                line = str(ser.readline())
+
+                line = str(ser.readline()).replace("\r\n","")
                 if(len(line)> 0):
                     if(line.find(",")):
                         data = line.split(",")
